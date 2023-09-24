@@ -48,3 +48,9 @@ axs[1].plot(x_vals, y_train.detach().numpy(), 'go', label = 'data')
 axs[1].set_title('model predictions')
 plt.show()
 print(model.state_dict())
+torch.save(model.state_dict(), './models/lin_reg_1.pkl')
+
+""" NOTES: 
+    1) model converges rather quickly, within 10-30 epochs;
+    2) with data size increasing, the learning rate should be decreased, 
+    otherwise the loss will increase infinetely"""

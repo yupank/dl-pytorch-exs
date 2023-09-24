@@ -1,5 +1,4 @@
 import torch
-# from torch.utils.data.dataloader import DataLoader
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
@@ -7,7 +6,7 @@ import torchvision.transforms as transforms
 from random import randrange
 import matplotlib.pyplot as plt
 
-# for the first time, download should be = Trus
+# for the first time, download should be = True
 trainset = datasets.CIFAR10(root='./data', download=False, transform= transforms.ToTensor())
 im_size = len(trainset)
 print(im_size)
