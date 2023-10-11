@@ -22,3 +22,14 @@ a = torch.rand(1,2,3,4)
 # print(a)
 # print(a.transpose(0,3).transpose(1,2))
 # print(a.permute(3,2,1,0))
+
+# testing the autograd
+
+a = torch.tensor([[0,1,2,3],[0,4,5,6]], requires_grad=True, dtype=torch.float)
+b = a + 2
+c = 2*b*b
+out = c.mean()
+out.backward(retain_graph=True)
+print(a.grad)
+out.backward()
+print(a.grad)
