@@ -34,7 +34,7 @@ class SeqNetModel(nn.Module):
             nn.Linear(in_dim, hid_dim_1),
             nn.ReLU(),
             nn.Linear(hid_dim_1, hid_dim_2),
-            nn.ReLU(),
+            nn.ELU(),
             nn.Linear(hid_dim_2, out_dim)
         )
     def forward(self,x):
@@ -50,8 +50,8 @@ def accuracy_rate(predicted, target):
 # essential model parameters
 in_dim = 28*28
 out_dim = 10
-batch_size = 128
-epochs = 20
+batch_size = 64
+epochs = 16
 learn_rate = 0.03
 
 # instantiating model
@@ -80,7 +80,8 @@ validation_accuracy = []
 for ep in range(epochs):  
     running_loss = 0
     ave_accuracy = 0  #epoch accuracy, averaged over batches
-    test_accuracy = 0
+    test_output = model(test_images.view(-1, in_dim))
+    validation_accuracy.append(accuracy_rate(test_output, test_labels))
     for count, (images, labels) in enumerate(train_loader):
         tr_images = images.view(-1, in_dim)
         optimizer.zero_grad()
@@ -92,8 +93,7 @@ for ep in range(epochs):
         ave_accuracy += accuracy_rate(tr_outputs, labels)
     train_loss.append(running_loss/(count+1))
     train_accuracy.append(ave_accuracy/(count+1))
-    test_output = model(test_images.view(-1, in_dim))
-    validation_accuracy.append(accuracy_rate(test_output, test_labels))
+
     print(f'loss: {running_loss} accuracy: {validation_accuracy[-1]}')
 end_tm = time()
 
@@ -106,8 +106,8 @@ axs[1].plot(range(1,epochs+1), train_accuracy, label="train accuracy")
 axs[1].plot(range(1,epochs+1), validation_accuracy, '--', label="test accuracy")
 axs[1].set_title('accuracy tracking')
 axs[1].legend()
-fig.suptitle('Sequential 2 hidden-layer with ReLU activation  model 2c ')
-plt.savefig(f'./reports/model_2c_ep{epochs}_btSz_{batch_size}_lr_{int(1000*learn_rate)}.svg', format='svg')
+fig.suptitle('Sequential 2 hidden-layer with ELU activation  model 2d ')
+plt.savefig(f'./reports/model_2d_ep{epochs}_btSz_{batch_size}_lr_{int(1000*learn_rate)}.svg', format='svg')
 plt.show()
 
 # evaluating model accuracy
@@ -135,8 +135,8 @@ while true_count < show_cols or err_count < show_cols and idx < len(test_labels)
         axs[1,err_count].set_title(f'label: {label}')
         err_count += 1
     idx += 1
-plt.savefig(f'./reports/model_2b_ep{epochs}_examples2.png', format='png')
-plt.savefig(f'./reports/model_2b_ep{epochs}_examples2.svg', format='svg')
+plt.savefig(f'./reports/model_2d_ep{epochs}_examples2.png', format='png')
+plt.savefig(f'./reports/model_2d_ep{epochs}_examples2.svg', format='svg')
 plt.show()
 
 
