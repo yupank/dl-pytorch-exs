@@ -64,7 +64,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr = learn_rate)
 
 
 train_loader = torch.utils.data.DataLoader(dataset= train_set, batch_size=batch_size, shuffle=True)
-test_loader = torch.utils.data.DataLoader(dataset= train_set, batch_size = 10000, shuffle= True)
+test_loader = torch.utils.data.DataLoader(dataset= test_set, batch_size = 10000, shuffle= True)
 
 test_data = iter(test_loader)
 test_images, test_labels = next(test_data)

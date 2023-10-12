@@ -14,20 +14,7 @@ print(im_size)
 # viewing examples of images
 show_rows = 3
 show_cols = 8
-fig, axs = plt.subplots(show_rows, show_cols, squeeze=False, figsize=(show_cols, show_rows) )
-
-# simple iteration
-# for ax_row in axs:
-#     for ax in ax_row:
-#         idx = randrange(im_size-1)
-#         tr_image = trainset[idx][0]
-#         np_image = tr_image.permute(1,2,0)
-#         ax.set_title(f'label {trainset[idx][1]}')
-#         ax.set_xlabel('')
-#         ax.set_xticks([])
-#         ax.set_ylabel('')
-#         ax.set_yticks([])
-#         ax.imshow(np_image)
+fig, axs = plt.subplots(show_rows, show_cols, squeeze=False, figsize=(show_cols, show_rows*2) )
 
 # iteration via DataLoader
 train_loader = torch.utils.data.DataLoader(trainset, batch_size=show_cols, shuffle=True)
@@ -41,6 +28,10 @@ for ax_row in axs:
     for i in range(show_cols):
         tr_image = images[i, :]
         np_image = tr_image.permute(1,2,0)
+        ax_row[i].set_xlabel('')
+        ax_row[i].set_xticks([])
+        ax_row[i].set_ylabel('')
+        ax_row[i].set_yticks([])
         ax_row[i].imshow(np_image)
         ax_row[i].set_title(f'_ {labels[i]} _')
 plt.show()
