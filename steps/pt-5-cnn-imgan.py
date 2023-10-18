@@ -40,6 +40,7 @@ class Cnn3Layer(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2),
             nn.Dropout(drop)
+
         )
         out_dim = int(inp_dim/64)
         self.lin_1 = nn.Linear(init_nodes*conv_3_scale*out_dim,10)
@@ -52,7 +53,7 @@ class Cnn3Layer(nn.Module):
         return self.lin_1(out)
 
 class Cnn4LayerSiam(nn.Module):
-    def __init__(self, init_nodes=8, n_channel=1, conv_kernel= 5, inp_dim=28*28, drop= 0.1):
+    def __init__(self, init_nodes=8, n_channel=3, conv_kernel= 5, inp_dim=28*28, drop= 0.1):
         super(Cnn4LayerSiam, self).__init__()
         self.name = f'cnn_4LS{init_nodes}'
         pad = int((conv_kernel-1)/2)
@@ -166,7 +167,7 @@ def nn_image_classifier(model, train_loader, test_loader, model_tag = '',
 
 
 
-batch_size = 128
+batch_size = 64
 # MNIST digits classification
 dig_train_set = datasets.MNIST(root='./data', train=True, download=False, transform= transforms.ToTensor())
 dig_test_set = datasets.MNIST(root='./data', train=False, download=True, transform= transforms.ToTensor())
@@ -185,14 +186,14 @@ cifar_train_loader = torch.utils.data.DataLoader(dataset= cifar_train_set, batch
 cifar_test_loader = torch.utils.data.DataLoader(dataset= cifar_test_set, batch_size = 10000, shuffle= True)
 
 in_dim = 32*32
-# model = Cnn3Layer(init_nodes=32, n_channel=3, conv_kernel=3, inp_dim=in_dim, drop = 0.15).to(device)
-model = Cnn4LayerSiam(init_nodes=40, n_channel=3,conv_kernel=5, inp_dim=in_dim, drop = 0.15).to(device)
+# model = Cnn3Layer(init_nodes=16, n_channel=3, conv_kernel=3, inp_dim=in_dim, drop = 0.15).to(device)
+model = Cnn4LayerSiam(init_nodes=16, n_channel=3,conv_kernel=5, inp_dim=in_dim, drop = 0.1).to(device)
 
 model_parameters = filter(lambda p: p.requires_grad, model.parameters())
 params = sum([np.prod(p.size()) for p in model_parameters])
 print(f'total {params} parameters')
 fin_acc, execution_tm = nn_image_classifier(model,cifar_train_loader, cifar_test_loader, 
-                                          model_tag='2d', learn_rate=0.01, epochs=12)
+                                          model_tag='3a', learn_rate=0.005, epochs=6)
 
 print(f'final test accuracy: {fin_acc}')
 print(f'execution time: {execution_tm}')
